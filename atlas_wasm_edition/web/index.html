@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATLAS PLC — High-Integrity WASM Compiler</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+  <!-- Header Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark"></span>
+      <div>
+        <strong>ATLAS PLC</strong>
+        <span>WASM compiler playground</span>
+      </div>
+    </div>
+    <nav>
+      <a href="./" class="active">Home</a>
+      <a href="playground/">Playground</a>
+      <a href="docs/">Docs</a>
+      <a href="reviews/">Reviews</a>
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" target="_blank" rel="noopener noreferrer">Download</a>
+    </nav>
+    <a href="playground/" class="button pill">Try Live</a>
+  </header>
+
+  <main>
+    <!-- Hero Section -->
+    <section class="hero reveal">
+      <div class="stripe"></div>
+      <div class="heroText">
+        <p class="eyebrow">Industrial PLC Compilation in-browser</p>
+        <h1>ATLAS — Compile, Verify, and Certify PLC Logic Faster</h1>
+        <p>Author ATLAS DSL with instant feedback: safety analysis, provenance-signed artifacts, vendor exports, and live WASM compilation. Built for audits and field reliability.</p>
+        
+        <div class="actions">
+          <a class="button primary" href="playground/">Try the Live Playground</a>
+          <a class="button" href="docs/">Read Docs</a>
+        </div>
+        
+        <div class="heroMetrics">
+          <div class="heroMetric">
+            <strong>11 Checkpoints</strong>
+            <span>IEC 61508 Safety Compliance</span>
+          </div>
+          <div class="heroMetric">
+            <strong>WASM Core</strong>
+            <span>Instant In-Browser Execution</span>
+          </div>
+          <div class="heroMetric">
+            <strong>Multi-Target</strong>
+            <span>Siemens, CODESYS, Rockwell</span>
+          </div>
+          <div class="heroMetric">
+            <strong>Signed Reports</strong>
+            <span>Cryptographic SHA-256 Provenance</span>
+          </div>
+        </div>
+      </div>
+      
+      <div class="heroPanel">
+        <div class="metric"><span>Outputs</span><strong>ST · Ladder · PLCopen</strong></div>
+        <div class="metric"><span>Targets</span><strong>Siemens · CODESYS · Rockwell</strong></div>
+        <div class="metric"><span>Deploy</span><strong>x86_64 · arm · wasm32</strong></div>
+        <div class="metric"><span>Safety Rating</span><strong style="color:var(--accent);">SIL 1 - SIL 4</strong></div>
+      </div>
+    </section>
+
+    <!-- NEW SECTION: Interactive Glideshow of Core Features -->
+    <section class="glideshow-section workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">Compiler Showcase</p>
+          <h2>Core Features in Action</h2>
+        </div>
+      </div>
+      
+      <div class="glideshow-container">
+        <div class="glideshow-btn prev">←</div>
+        <div class="glideshow-btn next">→</div>
+        
+        <div class="glideshow-viewport">
+          <div class="glideshow-wrapper">
+            
+            <!-- Slide 1 -->
+            <div class="glideshow-slide active">
+              <div class="glideshow-content">
+                <h3>01. IEC 61508 Safety Analyzer</h3>
+                <p>Run static safety checks on your control variables in real time. The compiler evaluates logic paths to flag overlapping controls or missing fail-safes.</p>
+                <ul>
+                  <li>Conflict detection (conflicting outputs)</li>
+                  <li>Emergency stop coverage validation</li>
+                  <li>Automatic SIL scoring and diagnostics</li>
+                </ul>
+              </div>
+              <div class="glideshow-visual">
+                <pre><code><span class="kw"># Safety Validation Report</span>
+[GOOD] Safety profile verification successful.
+[WARN] Line 8: IF block lacks default fallback.
+[BAD] motor_run is @CRITICAL but not forced OFF by @ESTOP.
+[INFO] Safety Rating: SIL 2 Compliance score: 87/100.</code></pre>
+              </div>
+            </div>
+            
+            <!-- Slide 2 -->
+            <div class="glideshow-slide">
+              <div class="glideshow-content">
+                <h3>02. Cross-Vendor Code Generation</h3>
+                <p>Compile clean, address-mapped, and standards-compliant Structured Text (ST) ready for direct import into professional industrial IDEs.</p>
+                <ul>
+                  <li>CODESYS V3 compliance</li>
+                  <li>Siemens TIA Portal source blocks</li>
+                  <li>Rockwell Automation Studio 5000 compatible output</li>
+                </ul>
+              </div>
+              <div class="glideshow-visual">
+                <pre><code><span class="kw">PROGRAM</span> PLC_PRG
+<span class="kw">VAR_INPUT</span>
+  estop_active : <span class="type">BOOL</span>;
+<span class="kw">END_VAR</span>
+<span class="kw">VAR_OUTPUT</span>
+  conveyor_enable : <span class="type">BOOL</span>;
+<span class="kw">END_VAR</span>
+<span class="kw">IF</span> estop_active <span class="kw">THEN</span>
+  conveyor_enable := <span class="kw">FALSE</span>;
+<span class="kw">ELSE</span>
+  conveyor_enable := <span class="kw">TRUE</span>;
+<span class="kw">END_IF</span>;
+<span class="kw">END_PROGRAM</span></code></pre>
+              </div>
+            </div>
+            
+            <!-- Slide 3 -->
+            <div class="glideshow-slide">
+              <div class="glideshow-content">
+                <h3>03. Cryptographic Provenance</h3>
+                <p>Generate verifiable compliance evidence for safety coordinators and external system auditors automatically during the build process.</p>
+                <ul>
+                  <li>SHA-256 compiler version signing</li>
+                  <li>Signed source & compiler bundle packages</li>
+                  <li>Static cyclomatic complexity verification</li>
+                </ul>
+              </div>
+              <div class="glideshow-visual">
+                <pre><code>{
+  <span class="str">"provenance"</span>: {
+    <span class="str">"compiler"</span>: <span class="str">"ATLAS DSL Compiler v2.0"</span>,
+    <span class="str">"signature"</span>: <span class="str">"sha256-a19f3900be435d8e788bc..."</span>,
+    <span class="str">"sil_level"</span>: 3,
+    <span class="str">"checks_run"</span>: 11,
+    <span class="str">"violations"</span>: 0
+  }
+}</code></pre>
+              </div>
+            </div>
+            
+          </div>
+        </div>
+        
+        <div class="glideshow-dots"></div>
+      </div>
+    </section>
+
+    <!-- Industrial Use Cases -->
+    <section id="use-cases" class="workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">Applications</p>
+          <h2>Industrial Use Cases</h2>
+        </div>
+      </div>
+      <div class="grid">
+        <div class="card">
+          <div class="cardTitle">Automated Assembly</div>
+          <div class="cardContent">
+            <p>Coordinate multi-axis motion with millisecond precision. ATLAS ensures safety-critical interlocks are always present and correctly evaluated.</p>
+            <ul>
+              <li>Collision avoidance logic</li>
+              <li>Emergency stop propagation</li>
+              <li>Deterministic scan cycles</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardTitle">Process Control</div>
+          <div class="cardContent">
+            <p>Manage complex temperature and pressure loops with ease. Use variable units and named constants to make your logic readable and auditable.</p>
+            <ul>
+              <li>PID loop definitions</li>
+              <li>Alarm management</li>
+              <li>Resource-bound execution</li>
+            </ul>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="cardTitle">Energy Management</div>
+          <div class="cardContent">
+            <p>Deploy to remote RTUs or energy storage systems. Hardened profiles and SHA-256 integrity reports ensure logic hasn't been tampered with.</p>
+            <ul>
+              <li>Load balancing logic</li>
+              <li>Island mode transitions</li>
+              <li>Signed deployment artifacts</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technical Architecture -->
+    <section id="overview" class="workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">Overview</p>
+          <h2>Technical Architecture</h2>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="card">
+          <div class="cardTitle">Compiler Pipeline</div>
+          <div class="cardContent">
+            <div class="pipeline-step">
+              <span class="step-num">01</span>
+              <div>
+                <strong>Lexer & Tokenizer</strong>
+                <p>Multilingual support with English, Spanish, Hindi, and Arabic keyword aliases.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <span class="step-num">02</span>
+              <div>
+                <strong>Recursive Descent Parser</strong>
+                <p>Constructs a high-integrity AST with strict condition nesting limits.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <span class="step-num">03</span>
+              <div>
+                <strong>Semantic Analysis</strong>
+                <p>Symbol discovery, I/O classification, and strict type checking.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <span class="step-num">04</span>
+              <div>
+                <strong>Safety & Compliance Engine</strong>
+                <p>11-check IEC 61508 analyzer with automated SIL rating.</p>
+              </div>
+            </div>
+            <div class="pipeline-step">
+              <span class="step-num">05</span>
+              <div>
+                <strong>Multi-Target CodeGen</strong>
+                <p>Sanitized export for Siemens, CODESYS, Rockwell, and PLCopen XML.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="card">
+          <div class="cardTitle">Safety Framework (IEC 61508)</div>
+          <div class="cardContent">
+            <p style="margin-bottom: 20px;">ATLAS implements an annotation-driven safety engine that validates code against critical industrial standards:</p>
+            <div class="safety-list">
+              <div class="safety-item">
+                <span class="check-icon">✓</span>
+                <div>
+                  <strong>Conflicting Outputs</strong>
+                  <p>Detects rules that could drive an output to opposite states simultaneously.</p>
+                </div>
+              </div>
+              <div class="safety-item">
+                <span class="check-icon">✓</span>
+                <div>
+                  <strong>Missing ELSE Paths</strong>
+                  <p>Ensures every conditional assignment has a defined safe-state fallback.</p>
+                </div>
+              </div>
+              <div class="safety-item">
+                <span class="check-icon">✓</span>
+                <div>
+                  <strong>E-Stop Coverage</strong>
+                  <p>Validates that @CRITICAL outputs are protected by @ESTOP logic.</p>
+                </div>
+              </div>
+              <div class="safety-item">
+                <span class="check-icon">✓</span>
+                <div>
+                  <strong>Circular Dependencies</strong>
+                  <p>Prevents logic loops that could cause jitter or non-deterministic behavior.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    </section>
+
+    <!-- Showcase Grid -->
+    <section id="showcase" class="workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">Enterprise Features</p>
+          <h2>Built for the Modern Plant</h2>
+        </div>
+      </div>
+
+      <div class="grid">
+        <section class="card feature-card">
+          <div class="feature-icon">⚡</div>
+          <div class="feature-body">
+            <h3>Automated SIL Scoring</h3>
+            <p>Immediate feedback on safety compliance with 0-100 scores mapped to SIL 1-4 levels.</p>
+          </div>
+        </section>
+
+        <section class="card feature-card">
+          <div class="feature-icon">🛑</div>
+          <div class="feature-body">
+            <h3>Safety Annotations</h3>
+            <p>Tag variables with @CRITICAL, @ESTOP, or @SILx directly in your source for deep analysis.</p>
+          </div>
+        </section>
+
+        <section class="card feature-card">
+          <div class="feature-icon">🔐</div>
+          <div class="feature-body">
+            <h3>Integrity Reports</h3>
+            <p>Generate deployment evidence with SHA-256 hashes for both source and generated artifacts.</p>
+          </div>
+        </section>
+
+        <section class="card feature-card">
+          <div class="feature-icon">🌐</div>
+          <div class="feature-body">
+            <h3>WASM Playground</h3>
+            <p>Full compiler features in your browser. Perfect for training, review, and rapid prototyping.</p>
+          </div>
+        </section>
+
+        <section class="card feature-card">
+          <div class="feature-icon">🔁</div>
+          <div class="feature-body">
+            <h3>Vendor Interop</h3>
+            <p>Sanitized, human-readable Structured Text that imports perfectly into all major PLC IDEs.</p>
+          </div>
+        </section>
+
+        <section class="card feature-card">
+          <div class="feature-icon">🧭</div>
+          <div class="feature-body">
+            <h3>Quality Diagnostics</h3>
+            <p>Cyclomatic complexity, nesting depth, and naming conventions checked automatically.</p>
+          </div>
+        </section>
+      </div>
+    </section>
+    
+    <!-- Language Reference syntax section -->
+    <section id="syntax" class="workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">DSL Syntax</p>
+          <h2>The ATLAS Language</h2>
+        </div>
+      </div>
+      
+      <div class="grid">
+        <div class="card">
+          <div class="cardTitle">Safety-Critical Motor Control</div>
+          <div class="code-example" style="border:none; margin:0;">
+            <pre><code># Declare safe variables
+VAR_OUTPUT
+  motor_enable : BOOL @CRITICAL
+  alarm_light  : BOOL
+END_VAR
+
+# Logic with safety gate
+IF emergency_stop = ON THEN
+  motor_enable = OFF
+  alarm_light  = ON
+ELSE
+  IF start_button = ON FOR 2 SECONDS THEN
+    motor_enable = ON
+  END
+END</code></pre>
+          </div>
+        </div>
+        
+        <div class="card">
+          <div class="cardTitle">Advanced Features</div>
+          <div class="cardContent">
+            <div class="syntax-features" style="margin-top:0;">
+              <div class="feature-tag">CASE Statements</div>
+              <div class="feature-tag">WHILE Loops</div>
+              <div class="feature-tag">State Machines</div>
+              <div class="feature-tag">Variable Units</div>
+              <div class="feature-tag">Named Constants</div>
+              <div class="feature-tag">Documentation Comments</div>
+              <div class="feature-tag">Multilingual Aliases</div>
+              <div class="feature-tag">Safety Annotations</div>
+            </div>
+            <p style="margin-top:20px; font-size:13px;">ATLAS compiles this clean representation into optimized Structured Text variables conforming to standard industrial Address Mapping protocols.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Industrial IDE Roadmap -->
+    <section id="roadmap" class="workbench">
+      <div class="benchHead">
+        <div>
+          <p class="eyebrow">Future</p>
+          <h2>Industrial IDE Roadmap</h2>
+        </div>
+      </div>
+      
+      <div class="roadmap-grid">
+        <div class="roadmap-item completed">
+          <div class="roadmap-marker"></div>
+          <div class="roadmap-content">
+            <h4>v2.0 Core Compiler</h4>
+            <p>11 safety checks, multi-vendor export, WASM bridge, and SHA-256 integrity.</p>
+            <span class="status-badge">Released</span>
+          </div>
+        </div>
+        <div class="roadmap-item active">
+          <div class="roadmap-marker"></div>
+          <div class="roadmap-content">
+            <h4>v2.1 Language Server</h4>
+            <p>Real-time diagnostics, auto-complete, and editor integration for VS Code.</p>
+            <span class="status-badge">In Progress</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker"></div>
+          <div class="roadmap-content">
+            <h4>v2.5 Simulation & Diff</h4>
+            <p>AST-aware simulation runtime and visual diffing for safety reviews.</p>
+            <span class="status-badge">Planned</span>
+          </div>
+        </div>
+        <div class="roadmap-item">
+          <div class="roadmap-marker"></div>
+          <div class="roadmap-content">
+            <h4>v3.0 Safety PDF & Sign-off</h4>
+            <p>Automated industrial certification reports and mandatory engineering sign-off gates.</p>
+            <span class="status-badge">Planned</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section id="call-to-action" class="workbench card" style="text-align:center; padding: 48px; background:rgba(16, 185, 129, 0.04); border-color: rgba(16,185,129,0.25);">
+      <h2 style="margin-bottom:16px;">Ready to modernize your PLC workflow?</h2>
+      <p style="color:var(--muted); max-width:600px; margin: 0 auto 28px;">Author industrial PLC applications in the browser with deterministic safety scores and standard conforming output.</p>
+      <div class="actions" style="justify-content:center; margin-top: 0;">
+        <a class="button primary" href="playground/">Try the Live Playground</a>
+        <a class="button" href="docs/">Browse Documentation</a>
+      </div>
+    </section>
+  </main>
+
+  <script src="assets/animations.js"></script>
+</body>
+</html>

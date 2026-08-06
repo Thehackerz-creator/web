@@ -1,0 +1,327 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATLAS PLC — Reviews & Issues</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <!-- Header Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark"></span>
+      <div>
+        <strong>ATLAS PLC</strong>
+        <span>Reviews & Feedback</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../">Home</a>
+      <a href="../playground/">Playground</a>
+      <a href="../docs/">Docs</a>
+      <a href="./" class="active">Reviews</a>
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" target="_blank" rel="noopener noreferrer">Download</a>
+    </nav>
+    <a href="../playground/" class="button pill">Try Live</a>
+  </header>
+
+  <main>
+    <section class="hero reveal" style="min-height: auto; padding: 40px 0 20px;">
+      <div class="stripe"></div>
+      <div class="heroText">
+        <p class="eyebrow">Community & Audits</p>
+        <h1>Reviews, Issues & Feedback</h1>
+        <p>Read what industrial control engineers say about ATLAS, report bugs, request features, or submit compliance reviews. Your feedback directly shapes our safety engine.</p>
+      </div>
+    </section>
+
+    <!-- Reviews Grid Layout -->
+    <div class="reviews-grid-layout workbench">
+      
+      <!-- Left column: Dashboard & Submit review -->
+      <aside class="reviews-dashboard card reveal">
+        <div class="cardTitle">Rating Summary</div>
+        <div class="cardContent">
+          <div class="rating-summary">
+            <div class="big-rating" id="avgRating">4.7</div>
+            <div>
+              <div class="big-stars" id="avgStars">★★★★★</div>
+              <div class="rating-count" id="totalReviewsCount">3 reviews</div>
+            </div>
+          </div>
+
+          <div class="rating-bars">
+            <!-- 5 Stars -->
+            <div class="rating-bar-row">
+              <span>5 Star</span>
+              <div class="rating-bar-container">
+                <div class="rating-bar-fill" id="bar5" style="width: 67%;"></div>
+              </div>
+              <span id="count5" style="text-align: right; width: 25px;">2</span>
+            </div>
+            <!-- 4 Stars -->
+            <div class="rating-bar-row">
+              <span>4 Star</span>
+              <div class="rating-bar-container">
+                <div class="rating-bar-fill" id="bar4" style="width: 33%;"></div>
+              </div>
+              <span id="count4" style="text-align: right; width: 25px;">1</span>
+            </div>
+            <!-- 3 Stars -->
+            <div class="rating-bar-row">
+              <span>3 Star</span>
+              <div class="rating-bar-container">
+                <div class="rating-bar-fill" id="bar3" style="width: 0%;"></div>
+              </div>
+              <span id="count3" style="text-align: right; width: 25px;">0</span>
+            </div>
+            <!-- 2 Stars -->
+            <div class="rating-bar-row">
+              <span>2 Star</span>
+              <div class="rating-bar-container">
+                <div class="rating-bar-fill" id="bar2" style="width: 0%;"></div>
+              </div>
+              <span id="count2" style="text-align: right; width: 25px;">0</span>
+            </div>
+            <!-- 1 Stars -->
+            <div class="rating-bar-row">
+              <span>1 Star</span>
+              <div class="rating-bar-container">
+                <div class="rating-bar-fill" id="bar1" style="width: 0%;"></div>
+              </div>
+              <span id="count1" style="text-align: right; width: 25px;">0</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="review-form-card" style="border-top: 1px solid var(--line); padding: 24px;">
+          <h3>Submit a Review / Issue</h3>
+          <form id="reviewForm">
+            <div class="form-group">
+              <label for="authorName">Your Name / Title</label>
+              <input type="text" id="authorName" class="form-control" placeholder="e.g. John Doe, PLC Architect" required>
+            </div>
+            
+            <div class="form-group">
+              <label>Select Rating</label>
+              <div class="stars-selector" id="starsSelector">
+                <span data-value="1">★</span>
+                <span data-value="2">★</span>
+                <span data-value="3">★</span>
+                <span data-value="4">★</span>
+                <span data-value="5" class="selected">★</span>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label>Category</label>
+              <div class="tag-options" id="tagOptions">
+                <button type="button" class="tag-btn active" data-value="general">General Review</button>
+                <button type="button" class="tag-btn" data-value="bug">Bug Report</button>
+                <button type="button" class="tag-btn" data-value="feature">Feature Request</button>
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="reviewText">Review or Issue Description</label>
+              <textarea id="reviewText" class="form-control" placeholder="Write details about compile tests, safety checks or ideas..." required></textarea>
+            </div>
+
+            <button type="submit" class="button primary" style="width: 100%;">Submit Feedback</button>
+          </form>
+        </div>
+      </aside>
+
+      <!-- Right column: Reviews Feed -->
+      <section class="reviews-feed">
+        <div class="reviews-list-header">
+          <h3 id="feedHeading">All Feedback</h3>
+        </div>
+        
+        <div class="reviews-list-container" id="reviewsContainer">
+          <!-- Reviews injected dynamically -->
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <script src="../assets/animations.js"></script>
+  <script>
+    // Seeding default reviews
+    const DEFAULT_REVIEWS = [
+      {
+        id: 1,
+        author: "Marcus Vance, Lead Safety Engineer",
+        rating: 5,
+        tag: "general",
+        text: "ATLAS compiler WASM playground has completely transformed how we prototype logic. The static IEC 61508 checks saved us from overlapping coil writes in our latest reactor startup sequence! Extremely clean compile diagnostics.",
+        date: "2026-05-10"
+      },
+      {
+        id: 2,
+        author: "Elena Rostova, Automation Architect",
+        rating: 5,
+        tag: "feature",
+        text: "The CODESYS and Siemens Structured Text export is incredibly clean. Being able to run AST checks instantly in the browser without loading up heavy vendor IDEs is a massive time-saver. Highly recommend the inline state machine compiler.",
+        date: "2026-05-18"
+      },
+      {
+        id: 3,
+        author: "Devon Miller, Control Technician",
+        rating: 4,
+        tag: "bug",
+        text: "Found a minor lexer parsing issue with nested loops but the developer fixed it. Redirecting download release files to the GitHub page is much better for obtaining prompt hotfixes and tracking compiler versions!",
+        date: "2026-05-24"
+      }
+    ];
+
+    let reviews = JSON.parse(localStorage.getItem('atlas_reviews'));
+    if (!reviews || reviews.length === 0) {
+      reviews = DEFAULT_REVIEWS;
+      localStorage.setItem('atlas_reviews', JSON.stringify(reviews));
+    }
+
+    // State parameters
+    let selectedRating = 5;
+    let selectedTag = "general";
+
+    // DOM Elements
+    const starsSelector = document.getElementById('starsSelector');
+    const stars = starsSelector.querySelectorAll('span');
+    const tagBtns = document.querySelectorAll('#tagOptions .tag-btn');
+    const reviewForm = document.getElementById('reviewForm');
+    const reviewsContainer = document.getElementById('reviewsContainer');
+
+    // Rating star handler
+    stars.forEach(star => {
+      star.addEventListener('click', () => {
+        selectedRating = parseInt(star.getAttribute('data-value'));
+        updateStarSelection();
+      });
+    });
+
+    function updateStarSelection() {
+      stars.forEach(star => {
+        const val = parseInt(star.getAttribute('data-value'));
+        if (val <= selectedRating) {
+          star.classList.add('selected');
+        } else {
+          star.classList.remove('selected');
+        }
+      });
+    }
+
+    // Tag button handler
+    tagBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        tagBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        selectedTag = btn.getAttribute('data-value');
+      });
+    });
+
+    // Form Submission
+    reviewForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const author = document.getElementById('authorName').value;
+      const text = document.getElementById('reviewText').value;
+      const today = new Date().toISOString().split('T')[0];
+
+      const newReview = {
+        id: Date.now(),
+        author,
+        rating: selectedRating,
+        tag: selectedTag,
+        text,
+        date: today
+      };
+
+      reviews.unshift(newReview);
+      localStorage.setItem('atlas_reviews', JSON.stringify(reviews));
+      
+      // Reset form
+      reviewForm.reset();
+      selectedRating = 5;
+      selectedTag = "general";
+      updateStarSelection();
+      tagBtns.forEach(b => b.classList.remove('active'));
+      document.querySelector('[data-value="general"]').classList.add('active');
+
+      renderReviews();
+    });
+
+    // Render logic
+    function renderReviews() {
+      // 1. Calculate stats
+      const total = reviews.length;
+      let sum = 0;
+      const distribution = { 5: 0, 4: 0, 3: 0, 2: 0, 1: 0 };
+      
+      reviews.forEach(r => {
+        sum += r.rating;
+        distribution[r.rating]++;
+      });
+
+      const avg = total > 0 ? (sum / total).toFixed(1) : "0.0";
+      
+      // Update UI elements
+      document.getElementById('avgRating').textContent = avg;
+      document.getElementById('avgStars').textContent = "★".repeat(Math.round(parseFloat(avg))) + "☆".repeat(5 - Math.round(parseFloat(avg)));
+      document.getElementById('totalReviewsCount').textContent = `${total} review${total === 1 ? '' : 's'}`;
+
+      // Update distribution bars
+      for (let i = 1; i <= 5; i++) {
+        const count = distribution[i];
+        const pct = total > 0 ? (count / total) * 100 : 0;
+        document.getElementById(`count${i}`).textContent = count;
+        document.getElementById(`bar${i}`).style.width = `${pct}%`;
+      }
+
+      // 2. Render review list
+      reviewsContainer.innerHTML = '';
+      reviews.forEach(r => {
+        const card = document.createElement('article');
+        card.className = 'review-card reveal';
+        
+        let tagLabel = "General";
+        let tagClass = "general";
+        if (r.tag === 'bug') { tagLabel = "Bug Report"; tagClass = "bug"; }
+        else if (r.tag === 'feature') { tagLabel = "Feature Request"; tagClass = "feature"; }
+
+        const starsStr = "★".repeat(r.rating) + "☆".repeat(5 - r.rating);
+        
+        card.innerHTML = `
+          <div class="review-header">
+            <div>
+              <div class="review-author">${escapeHtml(r.author)}</div>
+              <div class="review-meta">
+                <span class="review-tag ${tagClass}">${tagLabel}</span>
+                <span>${r.date}</span>
+              </div>
+            </div>
+            <div class="review-stars">${starsStr}</div>
+          </div>
+          <div class="review-body">
+            <p>${escapeHtml(r.text)}</p>
+          </div>
+        `;
+        reviewsContainer.appendChild(card);
+      });
+    }
+
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
+
+    // Initial render
+    renderReviews();
+  </script>
+</body>
+</html>

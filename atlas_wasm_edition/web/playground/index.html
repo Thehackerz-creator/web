@@ -1,0 +1,101 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ATLAS PLC — Interactive Compiler Playground</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../assets/style.css">
+</head>
+<body>
+  <!-- Header Topbar -->
+  <header class="topbar">
+    <div class="brand">
+      <span class="mark"></span>
+      <div>
+        <strong>ATLAS PLC</strong>
+        <span>Interactive Playground</span>
+      </div>
+    </div>
+    <nav>
+      <a href="../">Home</a>
+      <a href="./" class="active">Playground</a>
+      <a href="../docs/">Docs</a>
+      <a href="../reviews/">Reviews</a>
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" target="_blank" rel="noopener noreferrer">Download</a>
+    </nav>
+    <button id="premiumToggle" class="pill">Community</button>
+  </header>
+
+  <main style="padding-top: 24px;">
+    <!-- Compact Title & Metrics -->
+    <div class="reveal" style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+      <div>
+        <p class="eyebrow" style="margin-bottom: 4px;">Live Workbench</p>
+        <h2 style="font-size: 28px; line-height: 1.2;">ATLAS DSL Compiler</h2>
+      </div>
+      <div style="display: flex; gap: 16px; align-items: center; background: var(--panel); border: 1px solid var(--panel-border); padding: 8px 20px; border-radius: 8px;">
+        <span style="font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Target: <strong style="color:var(--ink); font-weight:700;">CODESYS ST</strong></span>
+        <span style="width: 1px; height: 16px; background: var(--line);"></span>
+        <span style="font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Mode: <strong id="engineMode" style="color:var(--accent-2); font-weight:700;">WASM Loading...</strong></span>
+        <span style="width: 1px; height: 16px; background: var(--line);"></span>
+        <span style="font-size: 11px; text-transform: uppercase; color: var(--muted); letter-spacing: 0.05em;">Security: <strong style="color:var(--warn); font-weight:700;">SHA-256 Signed</strong></span>
+      </div>
+    </div>
+
+    <!-- IDE Workbench Grid -->
+    <section class="workbench reveal">
+      <div class="benchHead" style="margin-bottom: 16px;">
+        <div>
+          <p style="color: var(--muted); font-size: 14px;">Write ATLAS DSL source on the left to analyze safety gates and compile to structured PLC code.</p>
+        </div>
+        <div class="toolbar">
+          <button id="sampleBtn" class="button">Load Sample</button>
+          <button id="runBtn" class="button primary">Run Compiler</button>
+          <button id="downloadStBtn" class="button">Export ST</button>
+          <button id="downloadBundleBtn" class="button premiumOnly locked">Export Bundle</button>
+        </div>
+      </div>
+
+      <div class="grid" style="grid-template-columns: 1fr 1fr; align-items: stretch; gap: 20px;">
+        <!-- Code Editor Panel -->
+        <section class="card editorCard">
+          <div class="cardTitle">
+            <span>Source Code (ATLAS DSL)</span>
+            <span style="font-size: 11px; text-transform: lowercase; color: var(--muted);">edit text below</span>
+          </div>
+          <textarea id="dsl" spellcheck="false" placeholder="Enter ATLAS DSL logic..."></textarea>
+        </section>
+
+        <!-- Compilation Results Pane -->
+        <section class="card resultCard">
+          <div class="tabs">
+            <button class="tab active" data-pane="st">Structured Text</button>
+            <button class="tab" data-pane="safety">Safety Report</button>
+            <button class="tab" data-pane="graph">Logic Graph</button>
+            <button class="tab" data-pane="diagnostics">Compiler Logs</button>
+          </div>
+          <pre id="st" class="pane active"></pre>
+          <div id="safety" class="pane report"></div>
+          <div id="graph" class="pane graphPane"></div>
+          <pre id="diagnostics" class="pane"></pre>
+        </section>
+      </div>
+    </section>
+  </main>
+
+  <script src="../assets/app.js"></script>
+  <script src="../assets/animations.js"></script>
+  <script>
+    // Trigger compilation on load
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        const runBtn = document.getElementById('runBtn');
+        if (runBtn) runBtn.click();
+      }, 500);
+    });
+  </script>
+</body>
+</html>

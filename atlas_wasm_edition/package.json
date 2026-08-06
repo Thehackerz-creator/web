@@ -1,0 +1,19 @@
+{
+  "name": "atlas-compiler-wasm-api",
+  "version": "2.0.0",
+  "description": "ATLAS PLC Compiler WebAssembly API & Web Server",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "keywords": [
+    "plc",
+    "compiler",
+    "wasm",
+    "iec61508",
+    "safety"
+  ],
+  "author": "ATLAS Team",
+  "license": "ISC",
+  "dependencies": {}
+}

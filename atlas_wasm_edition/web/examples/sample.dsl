@@ -1,0 +1,12 @@
+VAR_INPUT
+  a1 : BOOL @ESTOP
+  temp : REAL IN celsius
+END_VAR
+
+VAR_OUTPUT
+  b2 : BOOL @CRITICAL
+  fan : BOOL
+END_VAR
+
+IF a1 = ON THEN b2 = OFF ELSE b2 = ON END
+IF temp >= 50 THEN fan = ON ELSE fan = OFF END
