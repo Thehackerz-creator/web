@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>ATLAS — a compiler for industrial control logic</title>
+<meta name="description" content="ATLAS compiles a readable DSL into certified IEC 61131-3 Structured Text, Ladder output, and PLCopen XML for Siemens, CODESYS, and Rockwell.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>ATLAS</a>
+    <nav class="navlinks">
+      <a href="#transform">Compiler</a>
+      <a href="#features">Features</a>
+      <a href="#performance">Performance</a>
+      <a href="#download">Download</a>
+      <a href="docs.html">Docs</a>
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" class="nav-cta" target="_blank" rel="noopener">
+        <svg class="gh-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        Download
+      </a>
+    </nav>
+  </div>
+</header>
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <canvas id="hero-canvas"></canvas>
+  <div class="wrap hero-inner">
+    <p class="plate eyebrow">IEC 61131-3 / IEC 61508 &nbsp;·&nbsp; C99 &nbsp;·&nbsp; MIT</p>
+    <h1 class="h-hero">A compiler<br>for control logic<br>that <span class="accent">reads like intent.</span></h1>
+    <p class="lede" style="margin-top:26px;">
+      ATLAS turns a compact, human-readable DSL into Structured Text, Ladder output, and
+      PLCopen XML — targeted at Siemens TIA Portal, CODESYS V3, and Rockwell Studio 5000.
+      Write the rule once. Compile it for the floor.
+    </p>
+    <div class="btnrow" style="margin-top:38px;">
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" class="btn btn-primary" target="_blank" rel="noopener">Download on GitHub →</a>
+      <a href="docs.html" class="btn btn-ghost">Read the docs</a>
+      <a href="#transform" class="btn btn-ghost">See it compile</a>
+    </div>
+    <div class="hero-foot">
+      <div><b>3</b>vendor targets</div>
+      <div><b>10</b>deployment CPU profiles</div>
+      <div><b>150k</b>DSL lines / second</div>
+      <div><b>30</b>control industrial hardening pack</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DOWNLOAD ============ -->
+<section id="download">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="plate safe">Rung 00 — get the compiler</p>
+      <h2 class="h-section">Clone it. Build it.<br>Compile your first rule.</h2>
+      <p class="lede">ATLAS is MIT-licensed C99, hosted on GitHub. No installer, no account —
+        clone the repo and build with <code style="font-family:var(--f-mono); color:var(--teal);">make</code>.</p>
+    </div>
+
+    <div class="code-panel reveal" style="margin-bottom:28px;">
+      <div class="code-panel-head">
+        <span>github.com/Thehackerz-creator/Atlas-compilers</span>
+        <span>MIT · C99</span>
+      </div>
+      <pre>git clone https://github.com/Thehackerz-creator/Atlas-compilers.git
+<span class="tok-kw">cd</span> Atlas-compilers
+make debug
+./plc_compiler_debug examples/program.dsl output.st</pre>
+    </div>
+
+    <div class="btnrow reveal">
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" class="btn btn-primary" target="_blank" rel="noopener">
+        <svg class="gh-icon" viewBox="0 0 16 16" width="15" height="15" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        View on GitHub
+      </a>
+      <a href="docs.html#install" class="btn btn-ghost">Full install guide →</a>
+    </div>
+  </div>
+</section>
+
+<!-- ============ TRANSFORM SHOWCASE ============ -->
+<section id="transform">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="plate">Rung 01 — from DSL to plant floor</p>
+      <h2 class="h-section">One rule.<br>Three readable forms.</h2>
+      <p class="lede">This is the exact source language ATLAS accepts — no pseudocode. A single
+        interlock rule, compiled straight to IEC 61131-3 Structured Text.</p>
+    </div>
+
+    <div class="transform reveal">
+      <div class="code-panel">
+        <div class="code-panel-head"><span>source.dsl</span><span>ATLAS DSL</span></div>
+        <pre><span class="tok-cm"># Rule 1: Motor control with timer delay (5 seconds)</span>
+<span class="tok-kw">IF</span> switch = <span class="tok-val">ON</span> <span class="tok-kw">FOR</span> 5 <span class="tok-kw">SECONDS</span> <span class="tok-kw">THEN</span> motor = <span class="tok-val">ON</span> <span class="tok-kw">ELSE</span> motor = <span class="tok-val">OFF</span> <span class="tok-kw">END</span>
+
+<span class="tok-cm"># Rule 7: Emergency stop — all off if e_stop is triggered</span>
+<span class="tok-kw">IF</span> e_stop = <span class="tok-val">ON</span> <span class="tok-kw">THEN</span> motor = <span class="tok-val">OFF</span> <span class="tok-kw">ELSE</span> motor = <span class="tok-val">ON</span> <span class="tok-kw">END</span></pre>
+      </div>
+      <div class="transform-arrow">→</div>
+      <div class="code-panel">
+        <div class="code-panel-head"><span>output.st</span><span>--target siemens --format st</span></div>
+        <pre><span class="tok-cm">// Auto-generated Structured Text</span>
+<span class="tok-kw">IF</span> switch <span class="tok-kw">AND</span> t_switch.Q <span class="tok-kw">THEN</span>
+    motor := <span class="tok-val">TRUE</span>;
+<span class="tok-kw">ELSE</span>
+    motor := <span class="tok-val">FALSE</span>;
+<span class="tok-kw">END_IF</span>;
+
+<span class="tok-kw">IF</span> e_stop <span class="tok-kw">THEN</span>
+    motor := <span class="tok-val">FALSE</span>;
+<span class="tok-kw">ELSE</span>
+    motor := <span class="tok-val">TRUE</span>;
+<span class="tok-kw">END_IF</span>;</pre>
+      </div>
+    </div>
+    <p class="lede reveal" style="margin-top:22px; font-size:14px;">
+      Swap <code style="font-family:var(--f-mono); color:var(--teal);">--target</code> and the same
+      source compiles for CODESYS or Rockwell instead — or emits PLCopen XML for interchange.
+    </p>
+  </div>
+</section>
+
+<!-- ============ FEATURES ============ -->
+<section id="features">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="plate">Module — capability</p>
+      <h2 class="h-section">Built for the whole path from<br>rule to certified artifact.</h2>
+    </div>
+  </div>
+  <div class="wrap">
+    <div class="grid reveal">
+      <div class="card">
+        <span class="card-num">01</span>
+        <h3>Three vendor targets</h3>
+        <p>One source compiles to Siemens TIA Portal, CODESYS V3, or Rockwell Studio 5000 —
+          plus vendor-to-vendor ST translation via <code>--translate-from</code> / <code>--translate-to</code>.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">02</span>
+        <h3>IEC 61508 safety analysis</h3>
+        <p>The safety engine checks for rule conflicts, missing safe-state paths, and
+          e-stop coverage, and can gate a build on a minimum SIL level with <code>--min-sil</code>.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">03</span>
+        <h3>Diagnostics & code quality</h3>
+        <p>Maintainability and lint-style checks run with <code>--diagnostics</code>, reporting
+          in text, JSON, Markdown, or HTML for CI pipelines.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">04</span>
+        <h3>Multilingual DSL</h3>
+        <p>Core logic keywords have aliases in Spanish, Hindi, and Arabic —
+          <code>SI … ENTONCES … SINO … FIN</code> compiles identically to <code>IF … THEN … ELSE … END</code>.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">05</span>
+        <h3>Ten deployment CPU profiles</h3>
+        <p>x86_64/x86, ARMv7/AArch64, RISC-V RV32/RV64, PowerPC64, MIPS32/64, SPARC64, and a
+          WASM32 metadata profile — used for manifests and reproducible-build evidence.</p>
+      </div>
+      <div class="card">
+        <span class="card-num">06</span>
+        <h3>Integrity & security</h3>
+        <p>SHA-256 source and output hashing, an expected-hash gate, path sandboxing, and
+          resource limits on tokens, AST nodes, and symbols.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ PERFORMANCE ============ -->
+<section id="performance">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="plate safe">Rung 02 — measured, not marketed</p>
+      <h2 class="h-section">Stress-tested from 100 lines<br>to 100,000.</h2>
+      <p class="lede">Every row below is a real run of the formal stress generator, not a projection.</p>
+    </div>
+
+    <div class="statrow reveal">
+      <div class="stat"><div class="n">150k</div><div class="l">DSL lines / second</div></div>
+      <div class="stat"><div class="n">600,001</div><div class="l">AST nodes at 100k lines</div></div>
+      <div class="stat"><div class="n">677ms</div><div class="l">compile time at 100k lines</div></div>
+      <div class="stat"><div class="n">5/5</div><div class="l">golden tests passing</div></div>
+    </div>
+
+    <div class="code-panel reveal">
+      <div class="code-panel-head"><span>stress_gen — formal test suite</span><span>Linux VM</span></div>
+      <div style="padding:8px 22px 22px;">
+        <table class="dtab">
+          <thead><tr><th>Input size</th><th>DSL size</th><th>AST nodes</th><th>Time</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td>100 lines</td><td>5 KB</td><td>601</td><td>12 ms</td><td class="pass">PASS</td></tr>
+            <tr><td>1,000 lines</td><td>54 KB</td><td>6,001</td><td>18 ms</td><td class="pass">PASS</td></tr>
+            <tr><td>10,000 lines</td><td>572 KB</td><td>60,001</td><td>111 ms</td><td class="pass">PASS</td></tr>
+            <tr><td>50,000 lines</td><td>2.9 MB</td><td>300,001</td><td>340 ms</td><td class="pass">PASS</td></tr>
+            <tr><td>100,000 lines</td><td>5.9 MB</td><td>600,001</td><td>677 ms</td><td class="pass">PASS</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ HARDENING ============ -->
+<section id="hardening">
+  <div class="wrap">
+    <div class="section-head reveal">
+      <p class="plate">Rung 03 — the --industrial pack</p>
+      <h2 class="h-section">One flag. A thirty-control<br>evidence pack.</h2>
+      <p class="lede"><code style="font-family:var(--f-mono); color:var(--teal);">--industrial</code>
+        applies paranoid hardening plus safety, diagnostics, deterministic output, and no-overwrite
+        gates in a single pass.</p>
+    </div>
+
+    <div class="runglist reveal">
+      <div class="rung">
+        <div class="rung-tag">INTEGRITY</div>
+        <div><h4>Source & output hashing</h4><p>SHA-256 on source and output, constant-time hash compare, an expected-source-hash gate, and bounded/binary-safe source reads.</p></div>
+      </div>
+      <div class="rung">
+        <div class="rung-tag">SANDBOX</div>
+        <div><h4>Path & resource limits</h4><p>Path control-character rejection, sandbox path mode, parent-traversal and absolute-path rejection, symlink output rejection, and token/AST-node/symbol limits.</p></div>
+      </div>
+      <div class="rung">
+        <div class="rung-tag">WRITE SAFETY</div>
+        <div><h4>Atomic, checked output</h4><p>Atomic temp-file writes, output-overwrite refusal, write-error checking, and deterministic timestamps for reproducible builds.</p></div>
+      </div>
+      <div class="rung">
+        <div class="rung-tag">SAFETY GATES</div>
+        <div><h4>Fail before it ships</h4><p>Strict warning gate, safety-critical gate, minimum-SIL gate, required-e-stop gate, and required-ELSE (safe-state) gate.</p></div>
+      </div>
+      <div class="rung">
+        <div class="rung-tag">EVIDENCE</div>
+        <div><h4>Audit-ready reports</h4><p>Diagnostics quality score, IEC 61508 safety report, resource-limit manifest, vendor-target manifest, CPU-profile manifest, and machine-readable JSON evidence.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ FOOTER CTA ============ -->
+<footer>
+  <div class="wrap">
+    <div class="footcta reveal">
+      <p class="plate" style="justify-content:center; margin-bottom:18px;">Rung 04 — start here</p>
+      <h2 class="h-section">Write your first rule<br>in the next five minutes.</h2>
+      <div class="btnrow" style="justify-content:center; margin-top:30px;">
+        <a href="https://github.com/Thehackerz-creator/Atlas-compilers" class="btn btn-primary" target="_blank" rel="noopener">Download on GitHub →</a>
+        <a href="docs.html" class="btn btn-ghost">Open the step-by-step guide</a>
+      </div>
+    </div>
+    <div class="footrow">
+      <span>ATLAS — IEC 61131-3 PLC compiler, written in C99</span>
+      <span><a href="https://github.com/Thehackerz-creator/Atlas-compilers" target="_blank" rel="noopener" style="color:var(--text-faint);">github.com/Thehackerz-creator/Atlas-compilers</a> · MIT licensed</span>
+    </div>
+  </div>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="hero3d.js"></script>
+<script src="site.js"></script>
+</body>
+</html>

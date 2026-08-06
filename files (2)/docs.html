@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Docs — ATLAS</title>
+<meta name="description" content="Step-by-step guide to writing and compiling control logic in the ATLAS DSL.">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <a href="index.html" class="brand"><span class="brand-mark"></span>ATLAS</a>
+    <nav class="navlinks">
+      <a href="index.html#features">Features</a>
+      <a href="index.html#performance">Performance</a>
+      <a href="index.html#download">Download</a>
+      <a href="https://github.com/Thehackerz-creator/Atlas-compilers" class="nav-cta" target="_blank" rel="noopener">
+        <svg class="gh-icon" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true"><path fill="currentColor" d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8Z"/></svg>
+        GitHub
+      </a>
+    </nav>
+  </div>
+</header>
+
+<div class="docs-shell">
+  <aside class="docs-side">
+    <div class="docs-side-group">
+      <span class="lbl">Getting started</span>
+      <a href="#install">01 · Install & build</a>
+      <a href="#first-rule">02 · Your first rule</a>
+    </div>
+    <div class="docs-side-group">
+      <span class="lbl">The language</span>
+      <a href="#timers">03 · Timers</a>
+      <a href="#conditions">04 · Compound conditions</a>
+      <a href="#variables">05 · Variables & units</a>
+      <a href="#constants">06 · Constants</a>
+      <a href="#loops">07 · Loops</a>
+      <a href="#case">08 · Multi-state (CASE)</a>
+      <a href="#comments">09 · Comments</a>
+      <a href="#multilingual">10 · Multilingual DSL</a>
+      <a href="#recipes">11 · Recipes</a>
+    </div>
+    <div class="docs-side-group">
+      <span class="lbl">Compiling</span>
+      <a href="#targets">12 · Vendor targets & formats</a>
+      <a href="#safety">13 · Safety analysis</a>
+      <a href="#diagnostics">14 · Diagnostics</a>
+      <a href="#industrial">15 · Industrial hardening</a>
+      <a href="#cpu">16 · Deployment CPU profiles</a>
+      <a href="#translate">17 · Vendor translation</a>
+    </div>
+    <div class="docs-side-group">
+      <span class="lbl">Reference</span>
+      <a href="#cli-reference">CLI flag reference</a>
+    </div>
+  </aside>
+
+  <main class="docs-main">
+    <p class="plate eyebrow">Documentation</p>
+    <h1 class="h-section docs-title">Writing and compiling ATLAS</h1>
+    <p class="docs-intro">
+      ATLAS reads a compact DSL and emits IEC 61131-3 Structured Text, Ladder-style
+      textual output, or PLCopen XML, targeted at Siemens, CODESYS, or Rockwell.
+      This guide walks through the language rung by rung, then the CLI flags that
+      take a rule from source to a certified, audited artifact.
+    </p>
+
+    <!-- 01 -->
+    <div class="step" id="install">
+      <div class="step-head"><span class="step-tag">01</span><h2>Install & build</h2></div>
+      <p>ATLAS is a C99 project, MIT-licensed and hosted on GitHub. Clone it, build a debug
+        binary, and compile the bundled sample program to confirm your toolchain works.</p>
+      <div class="codeblock">
+        <div class="cb-head">Get the source</div>
+        <pre>git clone https://github.com/Thehackerz-creator/Atlas-compilers.git
+<span class="tok-kw">cd</span> Atlas-compilers</pre>
+      </div>
+      <div class="codeblock">
+        <div class="cb-head">Linux / macOS</div>
+        <pre><span class="tok-kw">make</span> debug
+./plc_compiler_debug examples/program.dsl output.st
+<span class="tok-kw">make</span> formal_test</pre>
+      </div>
+      <div class="codeblock">
+        <div class="cb-head">Windows — MSVC via CMake</div>
+        <pre>cmake -S . -B build\vs2022 -G "Visual Studio 17 2022" -A x64
+cmake --build build\vs2022 --config Debug
+ctest --test-dir build\vs2022 -C Debug --output-on-failure</pre>
+      </div>
+      <div class="note"><span>💡</span><span>Full source, issues, and releases live at <a href="https://github.com/Thehackerz-creator/Atlas-compilers" target="_blank" rel="noopener" style="color:var(--teal);">github.com/Thehackerz-creator/Atlas-compilers</a>.</span></div>
+      <p>The general CLI shape you'll use throughout this guide:</p>
+      <div class="codeblock">
+        <pre>./plc_compiler_debug &lt;input.dsl&gt; &lt;output&gt; [flags]</pre>
+      </div>
+    </div>
+
+    <!-- 02 -->
+    <div class="step" id="first-rule">
+      <div class="step-head"><span class="step-tag">02</span><h2>Your first rule</h2></div>
+      <p>Every rule follows the same shape: a condition, a <code>THEN</code> action, and an
+        <code>ELSE</code> action. Save this as <code>first.dsl</code>:</p>
+      <div class="codeblock">
+        <div class="cb-head">first.dsl</div>
+        <pre><span class="tok-kw">IF</span> sensor = <span class="tok-val">ON</span> <span class="tok-kw">THEN</span> motor = <span class="tok-val">ON</span> <span class="tok-kw">ELSE</span> motor = <span class="tok-val">OFF</span> <span class="tok-kw">END</span></pre>
+      </div>
+      <p>Compile it against the default target (Siemens TIA Portal) and format (Structured Text):</p>
+      <div class="codeblock">
+        <pre>./plc_compiler_debug first.dsl first.st</pre>
+      </div>
+      <div class="note"><span>💡</span><span><b>Operators</b> available in conditions: <code>=</code> <code>!=</code> <code>&gt;=</code> <code>&lt;=</code> <code>&gt;</code> <code>&lt;</code>. Values are <code>ON</code>, <code>OFF</code>, or numeric literals like <code>100</code> and <code>3.14</code>.</span></div>
+    </div>
+
+    <!-- 03 -->
+    <div class="step" id="timers">
+      <div class="step-head"><span class="step-tag">03</span><h2>Timers</h2></div>
+      <p>Add <code>FOR &lt;n&gt; &lt;unit&gt;</code> to a condition to require it to hold before the
+        action fires. Timer units are <code>SECONDS</code>, <code>MINUTES</code>, and <code>MILLISECONDS</code>.</p>
+      <div class="codeblock">
+        <div class="cb-head">Timer-guarded condition</div>
+        <pre><span class="tok-kw">IF</span> switch = <span class="tok-val">ON</span> <span class="tok-kw">FOR</span> 5 <span class="tok-kw">SECONDS</span> <span class="tok-kw">THEN</span> motor = <span class="tok-val">ON</span> <span class="tok-kw">ELSE</span> motor = <span class="tok-val">OFF</span> <span class="tok-kw">END</span></pre>
+      </div>
+      <p>This compiles to a generated ST timer instance that gates the branch — you write the
+        rule once, and ATLAS handles the timer instantiation.</p>
+    </div>
+
+    <!-- 04 -->
+    <div class="step" id="conditions">
+      <div class="step-head"><span class="step-tag">04</span><h2>Compound conditions</h2></div>
+      <p>Combine conditions with <code>AND</code>, <code>OR</code>, and negate with <code>NOT</code>.</p>
+      <div class="codeblock">
+        <div class="cb-head">Compound condition</div>
+        <pre><span class="tok-kw">IF</span> temp &gt;= 50 <span class="tok-kw">AND</span> switch = <span class="tok-val">ON</span> <span class="tok-kw">THEN</span> fan = <span class="tok-val">ON</span> <span class="tok-kw">ELSE</span> fan = <span class="tok-val">OFF</span> <span class="tok-kw">END</span></pre>
+      </div>
+      <div class="codeblock">
+        <div class="cb-head">Negation</div>
+        <pre><span class="tok-kw">IF</span> <span class="tok-kw">NOT</span> emergency_stop = <span class="tok-val">ON</span> <span class="tok-kw">THEN</span> pump = <span class="tok-val">ON</span> <span class="tok-kw">ELSE</span> pump = <span class="tok-val">OFF</span> <span class="tok-kw">END</span></pre>
+      </div>
+    </div>
+
+    <!-- 05 -->
+    <div class="step" id="variables">
+      <div class="step-head"><span class="step-tag">05</span><h2>Variables & units</h2></div>
+      <p>Declare inputs inside a <code>VAR_INPUT … END_VAR</code> block. Units are optional but
+        recommended — they're preserved into the generated ST and used by semantic analysis.</p>
+      <div class="codeblock">
+        <div class="cb-head">Units on variables</div>
+        <pre><span class="tok-kw">VAR_INPUT</span>
+  temp <span class="tok-kw">IN</span> celsius
+  pressure : <span class="tok-val">REAL</span> <span class="tok-kw">IN</span> bar
+<span class="tok-kw">END_VAR</span></pre>
+      </div>
+    </div>
+
+    <!-- 06 -->
+    <div class="step" id="constants">
+      <div class="step-head"><span class="step-tag">06</span><h2>Constants</h2></div>
+      <p>Name a threshold once and reuse it across rules. <code>CONST</code> declarations can carry a unit too.</p>
+      <div class="codeblock">
+        <pre>MAX_TEMP = 95
+<span class="tok-kw">CONST</span> MIN_PRESSURE = 2 <span class="tok-kw">IN</span> bar</pre>
+      </div>
+    </div>
+
+    <!-- 07 -->
+    <div class="step" id="loops">
+      <div class="step-head"><span class="step-tag">07</span><h2>Loops</h2></div>
+      <p><code>WHILE … DO … END</code> repeats its body while the condition holds — useful for
+        supervisory logic that should keep checking a running system state.</p>
+      <div class="codeblock">
+        <pre><span class="tok-kw">WHILE</span> system_active = <span class="tok-val">ON</span> <span class="tok-kw">DO</span>
+  <span class="tok-kw">IF</span> temp &gt;= 95 <span class="tok-kw">THEN</span> cooling = <span class="tok-val">ON</span> <span class="tok-kw">END</span>
+<span class="tok-kw">END</span></pre>
+      </div>
+    </div>
+
+    <!-- 08 -->
+    <div class="step" id="case">
+      <div class="step-head"><span class="step-tag">08</span><h2>Multi-state logic</h2></div>
+      <p>For more than two states, use <code>CASE … OF … DEFAULT … END_CASE</code> instead of
+        chaining <code>IF</code> blocks.</p>
+      <div class="codeblock">
+        <pre><span class="tok-kw">CASE</span> mode <span class="tok-kw">OF</span>
+  1: motor = <span class="tok-val">ON</span>; fan = <span class="tok-val">OFF</span>
+  2: motor = <span class="tok-val">ON</span>; fan = <span class="tok-val">ON</span>
+  <span class="tok-kw">DEFAULT</span>: motor = <span class="tok-val">OFF</span>; fan = <span class="tok-val">OFF</span>
+<span class="tok-kw">END_CASE</span></pre>
+      </div>
+    </div>
+
+    <!-- 09 -->
+    <div class="step" id="comments">
+      <div class="step-head"><span class="step-tag">09</span><h2>Comments</h2></div>
+      <p>Regular comments use <code>#</code>, <code>//</code>, or <code>/* … */</code> and are
+        stripped at compile time. Documentation comments — <code>///</code>, <code>##</code>, or
+        <code>/** … */</code> — are preserved into the generated ST as record-keeping for reviewers.</p>
+      <div class="codeblock">
+        <pre><span class="tok-cm">/// Boiler startup interlock</span></pre>
+      </div>
+    </div>
+
+    <!-- 10 -->
+    <div class="step" id="multilingual">
+      <div class="step-head"><span class="step-tag">10</span><h2>Multilingual DSL</h2></div>
+      <p>Core logic keywords have aliases in Spanish, Hindi, and Arabic, so teams can write rules
+        in the language they think in. Variable names stay PLC-safe identifiers regardless —
+        generated ST sanitizes names for the target platform.</p>
+      <div class="codeblock">
+        <div class="cb-head">Spanish alias — identical to the English form</div>
+        <pre><span class="tok-kw">SI</span> temp &gt;= MAX_TEMP <span class="tok-kw">ENTONCES</span> alarm = <span class="tok-val">ON</span> <span class="tok-kw">SINO</span> alarm = <span class="tok-val">OFF</span> <span class="tok-kw">FIN</span></pre>
+      </div>
+    </div>
+
+    <!-- 11 -->
+    <div class="step" id="recipes">
+      <div class="step-head"><span class="step-tag">11</span><h2>Recipes</h2></div>
+      <p>The IDE can hook in reusable logic templates with <code>USE</code>, so a common
+        sequence — like a boiler startup — doesn't need to be re-written per project.</p>
+      <div class="codeblock">
+        <pre><span class="tok-kw">USE</span> boiler_startup_sequence</pre>
+      </div>
+    </div>
+
+    <!-- 12 -->
+    <div class="step" id="targets">
+      <div class="step-head"><span class="step-tag">12</span><h2>Vendor targets & output formats</h2></div>
+      <p>Pick a vendor with <code>--target</code> and an output shape with <code>--format</code>.
+        The DSL source doesn't change — only the emitted artifact.</p>
+      <table class="flagtab">
+        <tr><td>--target siemens</td><td>Siemens TIA Portal S7-1200/1500 (default)</td></tr>
+        <tr><td>--target codesys</td><td>CODESYS V3</td></tr>
+        <tr><td>--target rockwell</td><td>Rockwell Studio 5000</td></tr>
+        <tr><td>--format st</td><td>Structured Text (default)</td></tr>
+        <tr><td>--format ladder</td><td>Ladder-style textual output</td></tr>
+        <tr><td>--format plcopen</td><td>PLCopen XML</td></tr>
+      </table>
+      <div class="codeblock">
+        <pre>./plc_compiler_debug first.dsl first.st --target codesys --format st</pre>
+      </div>
+    </div>
+
+    <!-- 13 -->
+    <div class="step" id="safety">
+      <div class="step-head"><span class="step-tag">13</span><h2>Safety analysis</h2></div>
+      <p>Run the IEC 61508 safety engine with <code>--safety</code>. It checks for rule conflicts,
+        missing safe-state paths, and emergency-stop coverage, and can gate the build outright.</p>
+      <table class="flagtab">
+        <tr><td>--safety</td><td>Run IEC 61508 safety analysis</td></tr>
+        <tr><td>--safety-report &lt;path&gt;</td><td>Write the safety report to a file</td></tr>
+        <tr><td>--min-sil &lt;1-4&gt;</td><td>Fail unless safety analysis reaches the requested SIL level</td></tr>
+        <tr><td>--require-estop</td><td>Fail unless an emergency-stop rule is present</td></tr>
+        <tr><td>--require-else</td><td>Fail if output rules omit ELSE / default safe-state paths</td></tr>
+        <tr><td>--fail-on-safety</td><td>Fail on safety-critical findings</td></tr>
+      </table>
+      <div class="note warn"><span>⚠</span><span><b>--require-else</b> is worth turning on early: every branch you write should define what happens in the safe state, not just the energized one.</span></div>
+    </div>
+
+    <!-- 14 -->
+    <div class="step" id="diagnostics">
+      <div class="step-head"><span class="step-tag">14</span><h2>Diagnostics</h2></div>
+      <p>Maintainability and lint-style checks run with <code>--diagnostics</code>, in a format
+        suited to a person or a CI pipeline.</p>
+      <table class="flagtab">
+        <tr><td>--diagnostics</td><td>Run maintainability and code-quality diagnostics</td></tr>
+        <tr><td>--diagnostics-report &lt;path&gt;</td><td>Write diagnostics report to a file</td></tr>
+        <tr><td>--diagnostics-format</td><td><code>text</code> / <code>json</code> / <code>markdown</code> / <code>html</code></td></tr>
+        <tr><td>--fail-on-warnings</td><td>Fail on compiler or diagnostics warnings</td></tr>
+      </table>
+    </div>
+
+    <!-- 15 -->
+    <div class="step" id="industrial">
+      <div class="step-head"><span class="step-tag">15</span><h2>Industrial hardening</h2></div>
+      <p><code>--industrial</code> applies paranoid hardening plus safety, diagnostics,
+        deterministic output, and no-overwrite gates in a single flag — a 30-control evidence
+        pack covering integrity hashing, sandboxing, atomic writes, and safety gates.</p>
+      <div class="codeblock">
+        <pre>./plc_compiler_debug plant.dsl plant.st --industrial --min-sil 2 --safety-report evidence.json</pre>
+      </div>
+      <p>See the <a href="index.html#hardening" style="color:var(--teal);">hardening pack breakdown</a> on the homepage for the full control list.</p>
+    </div>
+
+    <!-- 16 -->
+    <div class="step" id="cpu">
+      <div class="step-head"><span class="step-tag">16</span><h2>Deployment CPU profiles</h2></div>
+      <p>ATLAS stays a PLC DSL compiler — it doesn't replace GCC — but <code>--cpu</code> attaches
+        deployment metadata used for security manifests, reproducible builds, and review evidence.</p>
+      <table class="flagtab">
+        <tr><td>--cpu &lt;arch&gt;</td><td>x86_64, x86, armv7, aarch64, riscv32, riscv64, ppc64, mips32, mips64, sparc64, wasm32</td></tr>
+        <tr><td>--list-cpus</td><td>Print supported CPU profiles</td></tr>
+      </table>
+    </div>
+
+    <!-- 17 -->
+    <div class="step" id="translate">
+      <div class="step-head"><span class="step-tag">17</span><h2>Vendor translation</h2></div>
+      <p>Already have Structured Text from one vendor? Translate it to another without
+        round-tripping through the DSL.</p>
+      <table class="flagtab">
+        <tr><td>--translate-from &lt;vendor&gt;</td><td>Translate existing vendor ST from Siemens, CODESYS, or Rockwell</td></tr>
+        <tr><td>--translate-to &lt;vendor&gt;</td><td>Translate existing vendor ST to Siemens, CODESYS, or Rockwell</td></tr>
+      </table>
+    </div>
+
+    <!-- CLI REFERENCE -->
+    <div class="step" id="cli-reference" style="border-bottom:none;">
+      <div class="step-head"><span class="step-tag">REF</span><h2>Full CLI flag reference</h2></div>
+      <table class="flagtab">
+        <tr><td>--target siemens|codesys|rockwell</td><td>Vendor target (default siemens)</td></tr>
+        <tr><td>--format st|ladder|plcopen</td><td>Output format (default st)</td></tr>
+        <tr><td>--safety / --safety-report</td><td>IEC 61508 safety analysis and report path</td></tr>
+        <tr><td>--optimize</td><td>Run the AST optimizer</td></tr>
+        <tr><td>--diagnostics / --diagnostics-report / --diagnostics-format</td><td>Quality diagnostics and report options</td></tr>
+        <tr><td>--security-report &lt;path&gt;</td><td>Write source/output SHA-256 integrity report</td></tr>
+        <tr><td>--expect-source-hash &lt;sha256&gt;</td><td>Fail if the input source hash doesn't match</td></tr>
+        <tr><td>--cpu &lt;arch&gt; / --list-cpus</td><td>Deployment CPU profile</td></tr>
+        <tr><td>--hardening standard|strict|paranoid</td><td>Security/resource hardening profile</td></tr>
+        <tr><td>--industrial</td><td>Paranoid hardening + safety + diagnostics + deterministic + no-overwrite</td></tr>
+        <tr><td>--strict</td><td>Fail on compiler/diagnostics warnings and safety-critical findings</td></tr>
+        <tr><td>--min-sil &lt;1-4&gt;</td><td>Fail unless safety analysis reaches the requested SIL</td></tr>
+        <tr><td>--require-estop / --require-else</td><td>Require e-stop coverage / ELSE safe-state paths</td></tr>
+        <tr><td>--fail-on-safety / --fail-on-warnings</td><td>Fail builds on findings or warnings</td></tr>
+        <tr><td>--deterministic</td><td>Emit reproducible timestamps in generated artifacts</td></tr>
+        <tr><td>--no-overwrite / --allow-overwrite</td><td>Refuse or re-enable overwriting output files</td></tr>
+        <tr><td>--sandbox-paths</td><td>Require relative paths and reject <code>..</code> traversal</td></tr>
+        <tr><td>--max-source-bytes / --max-tokens / --max-ast-nodes / --max-symbols</td><td>Resource limits</td></tr>
+        <tr><td>--sim</td><td>Run the simulator pass</td></tr>
+        <tr><td>--dump-tokens / --dump-ast / --dump-symbols</td><td>Inspect compiler internals</td></tr>
+        <tr><td>--json</td><td>Emit machine-readable diagnostics</td></tr>
+        <tr><td>--quiet / --log &lt;path&gt; / --no-print-output</td><td>Console and logging behavior</td></tr>
+        <tr><td>--translate-from / --translate-to &lt;vendor&gt;</td><td>Vendor-to-vendor ST translation</td></tr>
+      </table>
+    </div>
+
+  </main>
+</div>
+
+<script src="site.js"></script>
+</body>
+</html>
